@@ -4,6 +4,7 @@ Start here! This guide walks you through setting up your Raspberry Pi Zero 2W an
 
 ## What You'll Need
 
+### Required Hardware
 - ✅ Raspberry Pi Zero 2W
 - ✅ Raspberry Pi High Quality Camera (12MP)
 - ✅ CSI ribbon cable (included with camera)
@@ -12,10 +13,8 @@ Start here! This guide walks you through setting up your Raspberry Pi Zero 2W an
 - ✅ Computer with SD card reader
 - ✅ WiFi network credentials
 
-**Optional but helpful:**
-- Micro-HDMI to HDMI cable (for display during setup)
-- USB OTG adapter + USB keyboard (for initial configuration)
-- Or use "headless" setup (we'll show you how)
+### Setup Method
+This guide uses **headless setup** - no monitor, keyboard, or HDMI cable needed! Everything is configured through the Raspberry Pi Imager before first boot, then accessed via SSH over WiFi.
 
 ---
 
@@ -39,7 +38,9 @@ Available for Windows, Mac, and Linux.
 5. **Choose Storage:** Select your SD card
 6. **Click ⚙️ (Settings gear)** before writing!
 
-### 1.3 Configure Advanced Options (IMPORTANT!)
+### 1.3 Configure Advanced Options (CRITICAL for Headless Setup!)
+
+**This step is what makes headless setup work** - you're configuring WiFi and SSH before the Pi ever boots, so you can access it remotely without needing a monitor or keyboard.
 
 In the settings window, configure:
 
@@ -58,31 +59,46 @@ In the settings window, configure:
 
 **Services Tab:**
 - ✅ **Enable SSH:** Check "Use password authentication"
+  - **This is critical!** Without SSH enabled, you can't access the Pi headlessly
 
 Click **Save**, then click **Yes** to write to SD card.
+
+**What just happened?**
+You configured the Pi to:
+- Connect to your WiFi automatically on first boot
+- Enable SSH so you can access it remotely
+- Set hostname so you can find it easily
+- All without ever needing a monitor!
 
 ⏱️ Writing takes 5-10 minutes.
 
 ---
 
-## Step 2: Boot the Raspberry Pi
+## Step 2: Boot the Raspberry Pi (Headless!)
 
 ### 2.1 Insert SD Card and Power On
 
+**No monitor or keyboard needed!** Just:
+
 1. **Eject SD card** from computer
-2. **Insert SD card** into Raspberry Pi
-3. **Connect power** via micro-USB port
+2. **Insert SD card** into Raspberry Pi (slot on underside)
+3. **Connect power** via micro-USB port (the one labeled "PWR IN")
 4. **Wait 1-2 minutes** for first boot
 
-The Pi will:
-- Resize the filesystem
-- Connect to WiFi
-- Generate SSH keys
-- Reboot automatically
+**What's happening (you can't see it, but it's working!):**
+- Resizing the filesystem to use full SD card
+- Connecting to your WiFi network
+- Starting SSH server
+- Setting hostname
+- Rebooting automatically
+
+**Green LED activity:** Should blink irregularly as it boots (this is normal)
 
 ### 2.2 Find Your Pi on the Network
 
-**Method 1: Using hostname**
+**Since we're doing headless setup, you need to find the Pi on your network.** Here are three methods:
+
+**Method 1: Using hostname (easiest)**
 ```bash
 # From your computer, try to ping
 ping prusa-camera.local
@@ -99,9 +115,11 @@ If that works, your Pi's address is `prusa-camera.local`
 - Use app like "Fing" (iOS/Android) or "Angry IP Scanner" (desktop)
 - Scan your network for new Raspberry Pi devices
 
-### 2.3 Connect via SSH
+### 2.3 Connect via SSH (Your First Access!)
 
-From your computer's terminal:
+**This is it - connecting to your Pi without any monitor!**
+
+From your computer's terminal/command prompt:
 
 ```bash
 # Using hostname (easier)
