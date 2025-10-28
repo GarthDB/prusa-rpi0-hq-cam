@@ -1,0 +1,140 @@
+# Prusa Camera Timelapse Configuration
+# Edit this file with your specific settings
+
+# Prusa Connect Settings
+prusa_connect:
+  enabled: true
+  # Get your token from: https://connect.prusa3d.com/
+  # Go to Cameras section -> "Add new other camera" -> Copy token
+  token: "YOUR_PRUSA_CONNECT_TOKEN_HERE"
+  # Your printer's fingerprint (found in printer settings)
+  printer_fingerprint: "YOUR_PRINTER_FINGERPRINT"
+  # Upload interval for live monitoring (seconds)
+  upload_interval: 10
+
+# Camera Settings
+camera:
+  # Resolution: "max" or specific like "1920x1080"
+  resolution: "max"  # Uses full 12MP (4056x3040) for HQ Camera
+  # JPEG quality (0-100, higher is better quality but larger file)
+  quality: 85
+  # Rotation in degrees (0, 90, 180, 270)
+  rotation: 0
+  # Horizontal flip
+  hflip: false
+  # Vertical flip
+  vflip: false
+  # ISO setting (100-800, or "auto")
+  iso: "auto"
+  # Shutter speed in microseconds (or "auto")
+  shutter_speed: "auto"
+  # White balance mode (auto, sunlight, cloudy, shade, tungsten, fluorescent, incandescent, flash, horizon)
+  awb_mode: "auto"
+
+# Capture Modes
+capture:
+  # Primary mode: "layer" (GPIO triggered) or "time" (interval based)
+  primary_mode: "layer"
+  
+  # Layer-based capture settings (GPIO triggered)
+  layer_mode:
+    enabled: true
+    # Delay after trigger before capture (seconds)
+    # Useful to let printer stabilize after movement
+    capture_delay: 0.5
+  
+  # Time-based capture settings
+  time_mode:
+    enabled: true
+    # Capture interval in seconds
+    interval: 30
+    # Only active during prints (requires layer mode to detect print start)
+    only_during_print: true
+
+# GPIO Settings
+gpio:
+  # GPIO pin for trigger input from hackerboard (BCM numbering)
+  trigger_pin: 17
+  # Pull-up/pull-down resistor (up, down, or none)
+  trigger_pull: "down"
+  # Trigger edge detection (rising, falling, or both)
+  trigger_edge: "rising"
+  # Debounce time in milliseconds
+  debounce_ms: 100
+
+# Storage Settings
+storage:
+  # Base directory for captured images
+  base_dir: "/home/pi/prusa-camera/captures"
+  # Organize by date (creates subdirectories like 2025-10-28)
+  organize_by_date: true
+  # Filename pattern (supports: {timestamp}, {counter}, {date}, {time})
+  filename_pattern: "img_{counter:05d}.jpg"
+  # Keep images after video compilation
+  keep_images_after_compile: false
+  # Maximum storage usage in GB (cleanup old captures when exceeded)
+  max_storage_gb: 20
+
+# Video Compilation Settings
+video:
+  # Frame rate for output video
+  framerate: 30
+  # Video codec (libx264 recommended for compatibility)
+  codec: "libx264"
+  # Encoding preset (ultrafast, fast, medium, slow, veryslow)
+  # Slower = better compression but takes longer
+  preset: "medium"
+  # Constant Rate Factor (0-51, lower is better quality, 18-28 is good range)
+  crf: 23
+  # Output resolution (or "source" to keep original)
+  output_resolution: "1920x1080"
+  # Filename pattern for videos
+  filename_pattern: "timelapse_{date}_{time}.mp4"
+
+# NAS Upload Settings
+nas:
+  enabled: false
+  # Protocol: "smb" or "nfs"
+  protocol: "smb"
+  # SMB settings
+  smb:
+    server: "192.168.1.100"
+    share: "videos"
+    path: "prusa_timelapses"
+    username: "your_username"
+    password: "your_password"
+    domain: "WORKGROUP"
+  # NFS settings
+  nfs:
+    server: "192.168.1.100"
+    export: "/mnt/videos"
+    path: "prusa_timelapses"
+  # Delete local video after successful upload
+  delete_after_upload: true
+  # Retry attempts if upload fails
+  retry_attempts: 3
+
+# Logging Settings
+logging:
+  # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  level: "INFO"
+  # Log file location
+  file: "/home/pi/prusa-camera/logs/camera.log"
+  # Maximum log file size in MB
+  max_size_mb: 10
+  # Number of backup log files to keep
+  backup_count: 5
+  # Also log to console (useful for debugging)
+  console: true
+
+# Advanced Settings
+advanced:
+  # Warmup captures to discard (camera needs time to adjust)
+  warmup_captures: 2
+  # Timeout for capture operations (seconds)
+  capture_timeout: 10
+  # Enable watchdog to restart service on failures
+  watchdog_enabled: true
+  # Watchdog timeout (seconds)
+  watchdog_timeout: 300
+

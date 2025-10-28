@@ -1,0 +1,25 @@
+# Python dependencies for Prusa Camera Timelapse System
+# Install with: pip3 install -r requirements.txt
+
+# GPIO control for Raspberry Pi
+gpiozero>=2.0.1
+RPi.GPIO>=0.7.1
+
+# YAML configuration parsing
+PyYAML>=6.0.1
+
+# HTTP requests for Prusa Connect API
+requests>=2.31.0
+
+# Image processing and manipulation
+Pillow>=10.0.0
+
+# System monitoring and process management
+psutil>=5.9.5
+
+# Async I/O support
+aiohttp>=3.9.0
+
+# Logging utilities
+python-daemon>=3.0.1
+
