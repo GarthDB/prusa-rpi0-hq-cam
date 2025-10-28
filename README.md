@@ -2,6 +2,12 @@
 
 Professional timelapse photography system for Prusa MK4S 3D printer using Raspberry Pi Zero 2W and High Quality Camera, with GPIO trigger synchronization and Prusa Connect integration.
 
+## 🚀 New User? Start Here!
+
+**[→ BASIC_SETUP.md](BASIC_SETUP.md)** - Step-by-step guide to get your camera working with Prusa Connect first (no GPIO wiring needed yet!)
+
+Once that's working, come back here to add the advanced GPIO timelapse features.
+
 ## Features
 
 - ⚡ **Layer-synchronized timelapse** - Captures triggered by G-code at each layer change via GPIO
@@ -29,6 +35,8 @@ Professional timelapse photography system for Prusa MK4S 3D printer using Raspbe
 - NAS or file server for video backup
 
 ## Quick Start
+
+**New to this project?** Start with the [BASIC_SETUP.md](BASIC_SETUP.md) guide to get your camera uploading to Prusa Connect first, then come back here to add GPIO timelapse features!
 
 ### 1. Hardware Setup
 
