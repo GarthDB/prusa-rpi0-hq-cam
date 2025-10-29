@@ -46,8 +46,9 @@ captures/
 *.mp4
 *.avi
 
-# Config files with sensitive data (create a config.yaml.example instead)
+# Config files with sensitive data
 config.yaml.backup
+.env
 
 # Temporary files
 *.tmp

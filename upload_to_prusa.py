@@ -7,13 +7,33 @@ import subprocess
 import requests
 import sys
 import os
+from pathlib import Path
 
-# EDIT THIS: Paste your Prusa Connect token here
-PRUSA_TOKEN = "YOUR_TOKEN_HERE"
-PRINTER_FINGERPRINT = ""  # Optional, can be blank or use your printer UUID
+# Load environment variables from .env file
+def load_env():
+    """Load .env file if it exists"""
+    env_file = Path(__file__).parent / '.env'
+    env_vars = {}
+    
+    if env_file.exists():
+        with open(env_file, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    # Remove quotes if present
+                    value = value.strip().strip('"').strip("'")
+                    env_vars[key.strip()] = value
+    
+    return env_vars
+
+# Load configuration
+env_vars = load_env()
+PRUSA_TOKEN = env_vars.get('PRUSA_TOKEN', '')
+PRINTER_FINGERPRINT = env_vars.get('PRINTER_FINGERPRINT', '')
 
 # Settings
-UPLOAD_INTERVAL = 30  # seconds between uploads
+UPLOAD_INTERVAL = int(env_vars.get('UPLOAD_INTERVAL', '30'))  # seconds between uploads
 IMAGE_PATH = "/tmp/prusa_snapshot.jpg"
 
 # Detect which camera command to use
@@ -84,8 +104,10 @@ def main():
     print("Press Ctrl+C to stop\n")
     
     # Check token is set
-    if PRUSA_TOKEN == "YOUR_TOKEN_HERE":
-        print("ERROR: Please edit the script and set your Prusa Connect token!")
+    if not PRUSA_TOKEN:
+        print("ERROR: PRUSA_TOKEN not set!")
+        print("Please create a .env file with your Prusa Connect token.")
+        print("See .env.example for the template.")
         sys.exit(1)
     
     while True:
