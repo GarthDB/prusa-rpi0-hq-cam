@@ -186,7 +186,18 @@ Wait 30 seconds, then unplug power.
    ssh pi@prusa-camera.local
    ```
 
-4. **Check if camera is detected:**
+4. **Install camera software:**
+   ```bash
+   # Update package list
+   sudo apt update
+   
+   # Install libcamera apps
+   sudo apt install -y libcamera-apps
+   ```
+   
+   This takes 1-2 minutes.
+
+5. **Check if camera is detected:**
    ```bash
    libcamera-hello --list-cameras
    ```
@@ -204,14 +215,14 @@ Wait 30 seconds, then unplug power.
 
    If you see this, **camera is working!** ✅
 
-5. **Capture a test image:**
+6. **Capture a test image:**
    ```bash
    libcamera-still -o test.jpg
    ```
 
    This captures a 2-second preview, then saves `test.jpg`.
 
-6. **View the image** (optional):
+7. **View the image** (optional):
    - Use SCP to copy to your computer:
      ```bash
      # From your computer
