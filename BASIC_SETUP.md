@@ -199,28 +199,32 @@ Wait 30 seconds, then unplug power.
 
 5. **Check if camera is detected:**
    ```bash
-   libcamera-hello --list-cameras
+   rpicam-hello --list-cameras
    ```
+   
+   **Note:** Older Raspberry Pi OS versions use `libcamera-hello` instead of `rpicam-hello`. If `rpicam-hello` doesn't work, try `libcamera-hello`.
 
    **Expected output:**
    ```
    Available cameras
    -----------------
-   0 : imx477 [4056x3040] (/base/soc/i2c0mux/i2c@1/imx477@1a)
-       Modes: 'SRGGB10_CSI2P' : 1332x990 [120.05 fps - ...]
-              'SRGGB12_CSI2P' : 2028x1080 [50.03 fps - ...]
-                                2028x1520 [40.01 fps - ...]
-                                4056x3040 [10.00 fps - ...]
+   0 : imx477 [4056x3040 12-bit RGGB] (/base/soc/i2c0mux/i2c@1/imx477@1a)
+       Modes: 'SRGGB10_CSI2P' : 1332x990 [125.83 fps - ...]
+              'SRGGB12_CSI2P' : 2028x1080 [65.36 fps - ...]
+                                2028x1520 [46.49 fps - ...]
+                                4056x3040 [11.89 fps - ...]
    ```
 
    If you see this, **camera is working!** ✅
 
 6. **Capture a test image:**
    ```bash
-   libcamera-still -o test.jpg
+   rpicam-still -o test.jpg
    ```
 
    This captures a 2-second preview, then saves `test.jpg`.
+   
+   **Note:** Use `libcamera-still` if you have an older OS version.
 
 7. **View the image** (optional):
    - Use SCP to copy to your computer:
@@ -297,6 +301,7 @@ import time
 import subprocess
 import requests
 import sys
+import os
 
 # EDIT THIS: Paste your Prusa Connect token here
 PRUSA_TOKEN = "YOUR_TOKEN_HERE"
@@ -306,11 +311,14 @@ PRINTER_FINGERPRINT = ""  # Optional, can be blank
 UPLOAD_INTERVAL = 30  # seconds between uploads
 IMAGE_PATH = "/tmp/prusa_snapshot.jpg"
 
+# Detect which camera command to use
+CAMERA_CMD = 'rpicam-still' if os.system('which rpicam-still > /dev/null 2>&1') == 0 else 'libcamera-still'
+
 def capture_image():
     """Capture image from camera"""
     try:
         subprocess.run([
-            'libcamera-still',
+            CAMERA_CMD,
             '-o', IMAGE_PATH,
             '--width', '1920',
             '--height', '1080',
@@ -347,6 +355,7 @@ def upload_to_prusa():
 
 def main():
     print("Prusa Camera Uploader Starting...")
+    print(f"Using camera command: {CAMERA_CMD}")
     print(f"Upload interval: {UPLOAD_INTERVAL} seconds")
     print("Press Ctrl+C to stop\n")
     
@@ -582,11 +591,11 @@ ls -l ~/prusa-camera/upload_to_prusa.py
 
 ### Images Are Dark/Overexposed
 
-Edit script, add camera settings after line with `libcamera-still`:
+Edit script, add camera settings after line with `CAMERA_CMD`:
 
 ```python
 subprocess.run([
-    'libcamera-still',
+    CAMERA_CMD,  # Uses rpicam-still or libcamera-still automatically
     '-o', IMAGE_PATH,
     '--width', '1920',
     '--height', '1080',
