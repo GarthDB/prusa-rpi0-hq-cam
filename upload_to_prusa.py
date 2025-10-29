@@ -56,6 +56,38 @@ def capture_image():
         print(f"Capture failed: {e}")
         return False
 
+def set_camera_name():
+    """Set camera name in Prusa Connect"""
+    try:
+        url = "https://webcam.connect.prusa3d.com/c/info"
+        
+        token = PRUSA_TOKEN.strip()
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Token': token
+        }
+        
+        payload = {
+            'config': {
+                'name': CAMERA_NAME
+            }
+        }
+        
+        response = requests.put(url, headers=headers, json=payload, timeout=10)
+        
+        if response.status_code == 200:
+            print(f"✓ Camera name set to: {CAMERA_NAME}")
+            return True
+        else:
+            print(f"⚠ Failed to set camera name: {response.status_code}")
+            print(f"  Response: {response.text}")
+            return False
+            
+    except Exception as e:
+        print(f"⚠ Could not set camera name: {e}")
+        return False
+
 def upload_to_prusa():
     """Upload image to Prusa Connect"""
     try:
@@ -72,10 +104,6 @@ def upload_to_prusa():
         # Only add fingerprint if it's not empty
         if fingerprint:
             headers['Fingerprint'] = fingerprint
-        
-        # Add camera name
-        if CAMERA_NAME:
-            headers['Camera-Name'] = CAMERA_NAME
         
         # DEBUG: Print what we're sending
         print(f"Token length: {len(token)} chars")
@@ -114,6 +142,12 @@ def main():
         print("Please create a .env file with your Prusa Connect token.")
         print("See .env.example for the template.")
         sys.exit(1)
+    
+    # Set camera name if configured
+    if CAMERA_NAME:
+        print(f"Setting camera name to: {CAMERA_NAME}")
+        set_camera_name()
+        print()
     
     while True:
         try:
