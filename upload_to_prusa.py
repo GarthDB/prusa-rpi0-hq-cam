@@ -56,38 +56,6 @@ def capture_image():
         print(f"Capture failed: {e}")
         return False
 
-def set_camera_name():
-    """Set camera name in Prusa Connect"""
-    try:
-        url = "https://connect.prusa3d.com/c/config"
-        
-        token = PRUSA_TOKEN.strip()
-        
-        headers = {
-            'Content-Type': 'application/json',
-            'Token': token
-        }
-        
-        payload = {
-            'config': {
-                'name': CAMERA_NAME
-            }
-        }
-        
-        response = requests.put(url, headers=headers, json=payload, timeout=10)
-        
-        if response.status_code == 200:
-            print(f"✓ Camera name set to: {CAMERA_NAME}")
-            return True
-        else:
-            print(f"⚠ Failed to set camera name: {response.status_code}")
-            print(f"  Response: {response.text}")
-            return False
-            
-    except Exception as e:
-        print(f"⚠ Could not set camera name: {e}")
-        return False
-
 def upload_to_prusa():
     """Upload image to Prusa Connect"""
     try:
@@ -143,10 +111,10 @@ def main():
         print("See .env.example for the template.")
         sys.exit(1)
     
-    # Set camera name if configured
-    if CAMERA_NAME:
-        print(f"Setting camera name to: {CAMERA_NAME}")
-        set_camera_name()
+    # Note about camera naming
+    if CAMERA_NAME and CAMERA_NAME != 'Raspberry Pi Camera':
+        print(f"Note: To set camera name to '{CAMERA_NAME}', go to:")
+        print("      https://connect.prusa3d.com/ -> Cameras -> Click your camera -> Rename")
         print()
     
     while True:
