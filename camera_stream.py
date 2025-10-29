@@ -152,6 +152,7 @@ class StreamingHandler(BaseHTTPRequestHandler):
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Prusa Camera Stream</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -202,7 +203,7 @@ class StreamingHandler(BaseHTTPRequestHandler):
     </style>
 </head>
 <body>
-    <h1>🎥 Prusa Camera Stream</h1>
+    <h1>Prusa Camera Stream</h1>
     <div class="stream-container">
         <img src="/stream" alt="Camera Stream">
     </div>
