@@ -31,6 +31,7 @@ def load_env():
 env_vars = load_env()
 PRUSA_TOKEN = env_vars.get('PRUSA_TOKEN', '')
 PRINTER_FINGERPRINT = env_vars.get('PRINTER_FINGERPRINT', '')
+CAMERA_NAME = env_vars.get('CAMERA_NAME', 'Raspberry Pi Camera')
 
 # Settings
 UPLOAD_INTERVAL = int(env_vars.get('UPLOAD_INTERVAL', '30'))  # seconds between uploads
@@ -71,6 +72,10 @@ def upload_to_prusa():
         # Only add fingerprint if it's not empty
         if fingerprint:
             headers['Fingerprint'] = fingerprint
+        
+        # Add camera name
+        if CAMERA_NAME:
+            headers['Camera-Name'] = CAMERA_NAME
         
         # DEBUG: Print what we're sending
         print(f"Token length: {len(token)} chars")
