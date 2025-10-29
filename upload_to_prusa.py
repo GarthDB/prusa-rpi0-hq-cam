@@ -59,7 +59,7 @@ def capture_image():
 def set_camera_name():
     """Set camera name in Prusa Connect"""
     try:
-        url = "https://webcam.connect.prusa3d.com/c/info"
+        url = "https://connect.prusa3d.com/c/config"
         
         token = PRUSA_TOKEN.strip()
         
