@@ -32,11 +32,11 @@ def load_env():
 env_vars = load_env()
 
 # Configuration
-STREAM_WIDTH = int(env_vars.get('STREAM_WIDTH', '1280'))
-STREAM_HEIGHT = int(env_vars.get('STREAM_HEIGHT', '720'))
-STREAM_FPS = int(env_vars.get('STREAM_FPS', '15'))
+STREAM_WIDTH = int(env_vars.get('STREAM_WIDTH', '640'))
+STREAM_HEIGHT = int(env_vars.get('STREAM_HEIGHT', '480'))
+STREAM_FPS = int(env_vars.get('STREAM_FPS', '10'))
 STREAM_PORT = int(env_vars.get('STREAM_PORT', '8080'))
-STREAM_QUALITY = int(env_vars.get('STREAM_QUALITY', '80'))
+STREAM_QUALITY = int(env_vars.get('STREAM_QUALITY', '60'))
 
 # Detect camera command
 CAMERA_CMD = 'rpicam-vid' if os.system('which rpicam-vid > /dev/null 2>&1') == 0 else 'libcamera-vid'
@@ -94,6 +94,9 @@ class StreamingHandler(BaseHTTPRequestHandler):
             '--quality', str(STREAM_QUALITY),
             '-t', '0',  # Run indefinitely
             '-n',  # No preview
+            '--denoise', 'cdn_off',  # Disable denoise for speed
+            '--awb', 'auto',  # Auto white balance
+            '--metering', 'average',  # Average metering (faster)
             '-o', '-'  # Output to stdout
         ]
         
